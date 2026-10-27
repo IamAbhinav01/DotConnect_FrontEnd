@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #0B0B0B;
+  --color-surface-1: #121212;
+  --color-surface-2: #181818;
+  --color-surface-3: #1F1F1F;
+  --color-pink: #FF2DA8;
+  --color-lime: #D4FF3F;
+  --color-danger: #FF5A36;
+  --color-line: rgba(255, 255, 255, 0.08);
+  --color-text: #F5F5F5;
+  --color-muted: #9A9A9A;
+
+  --font-display: "Space Grotesk", sans-serif;
+  --font-sans: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+/* Custom Base & Utilities */
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--color-ink);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+/* Floating Glassmorphism Layer */
+.glass-panel {
+  background-color: rgba(18, 18, 18, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Pink Neon Glow */
+.glow-pink {
+  box-shadow: 0 0 0 1px #FF2DA8, 0 0 24px rgba(255, 45, 168, 0.25);
+}
+
+.glow-lime {
+  box-shadow: 0 0 0 1px #D4FF3F, 0 0 24px rgba(212, 255, 63, 0.25);
+}
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
