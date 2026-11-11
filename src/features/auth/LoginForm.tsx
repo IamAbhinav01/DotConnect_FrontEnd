@@ -2,7 +2,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { Button } from '../../shared/ui/Button'
 import { Input } from '../../shared/ui/Input'
@@ -17,6 +17,8 @@ type LoginValues = z.infer<typeof loginSchema>
 
 export const LoginForm: React.FC = () => {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const redirectPath = searchParams.get('redirect') || '/'
   const { mutateAsync: login, isPending } = useLogin()
 
   const {
@@ -31,7 +33,7 @@ export const LoginForm: React.FC = () => {
     try {
       await login(values)
       toast.success('Logged in successfully!')
-      navigate('/')
+      navigate(redirectPath)
     } catch (err: any) {
       toast.error(err.message || 'Invalid email or password')
     }

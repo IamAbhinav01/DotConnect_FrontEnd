@@ -56,3 +56,33 @@ export function useCreateWorkspace() {
     },
   })
 }
+
+export function useUpdateWorkspace(slug?: string) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (payload: { name?: string; description?: string }) =>
+      api<{ message: string; data: Workspace }>(`/workspace/${slug}/update`, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.workspaces })
+      if (slug) {
+        queryClient.invalidateQueries({ queryKey: queryKeys.workspace(slug) })
+      }
+    },
+  })
+}
+
+export function useDeleteWorkspace(slug?: string) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: () =>
+      api<{ message: string }>(`/workspace/${slug}/removeWorkspace`, {
+        method: 'POST',
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.workspaces })
+    },
+  })
+}

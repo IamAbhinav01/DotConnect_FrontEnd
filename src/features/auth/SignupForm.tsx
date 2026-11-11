@@ -2,7 +2,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { Button } from '../../shared/ui/Button'
 import { Input } from '../../shared/ui/Input'
@@ -23,6 +23,8 @@ type SignupValues = z.infer<typeof signupSchema>
 
 export const SignupForm: React.FC = () => {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const redirectPath = searchParams.get('redirect') || '/'
   const { mutateAsync: signup, isPending } = useSignup()
 
   const {
@@ -37,7 +39,7 @@ export const SignupForm: React.FC = () => {
     try {
       await signup({ email: values.email, password: values.password })
       toast.success('Account created successfully!')
-      navigate('/')
+      navigate(redirectPath)
     } catch (err: any) {
       toast.error(err.message || 'Error creating account')
     }

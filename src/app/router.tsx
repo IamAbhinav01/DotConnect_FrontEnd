@@ -1,16 +1,20 @@
 import React from 'react'
-import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom'
+import { createBrowserRouter, Navigate, Outlet, useLocation } from 'react-router-dom'
 import { AuthLayout } from './layouts/AuthLayout'
 import { AppShell } from './layouts/AppShell'
 import { LoginForm } from '../features/auth/LoginForm'
 import { SignupForm } from '../features/auth/SignupForm'
 import { WorkspaceDashboard } from '../features/workspaces/WorkspaceDashboard'
+import { HomeDashboard } from '../features/workspaces/HomeDashboard'
 import { MembersTable } from '../features/members/MembersTable'
+import { InviteAcceptPage } from '../features/invites/InviteAcceptPage'
+import { WorkspaceSettings } from '../features/workspaces/WorkspaceSettings'
 import { useMe } from '../features/auth/useAuth'
 
 // Auth Guard Wrapper
 const ProtectedRoute: React.FC = () => {
   const { data: user, isLoading } = useMe()
+  const location = useLocation()
 
   if (isLoading) {
     return (
@@ -21,7 +25,8 @@ const ProtectedRoute: React.FC = () => {
   }
 
   if (!user) {
-    return <Navigate to="/login" replace />
+    const redirectUrl = encodeURIComponent(location.pathname + location.search)
+    return <Navigate to={`/login?redirect=${redirectUrl}`} replace />
   }
 
   return <Outlet />
@@ -67,10 +72,20 @@ export const router = createBrowserRouter([
   {
     element: <ProtectedRoute />,
     children: [
+      // Standalone invite preview & accept page
+      {
+        path: '/invite/:code',
+        element: <InviteAcceptPage />,
+      },
+      // App layout with workspace rail & sidebar
       {
         path: '/',
         element: <AppShell />,
         children: [
+          {
+            index: true,
+            element: <HomeDashboard />,
+          },
           {
             path: 'workspace/:slug',
             element: <WorkspaceDashboard />,
@@ -81,11 +96,7 @@ export const router = createBrowserRouter([
           },
           {
             path: 'workspace/:slug/settings',
-            element: (
-              <div className="p-8 text-muted text-sm font-mono">
-                Workspace Settings (Coming Soon)
-              </div>
-            ),
+            element: <WorkspaceSettings />,
           },
         ],
       },
@@ -98,3 +109,4 @@ export const router = createBrowserRouter([
     element: <Navigate to="/" replace />,
   },
 ])
+

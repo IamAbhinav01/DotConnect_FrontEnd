@@ -4,4 +4,6 @@ export const queryKeys = {
   workspace: (slug: string) => ['workspaces', slug] as const,
   members: (slug: string) => ['workspaces', slug, 'members'] as const,
   userSearch: (query: string) => ['users', 'search', query] as const,
+  joinRequests: (slug: string) => ['workspaces', slug, 'join-requests'] as const,
+  invitePreview: (code: string) => ['invite-preview', code] as const,
 }
